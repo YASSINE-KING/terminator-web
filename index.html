@@ -94,7 +94,8 @@
                 const serverUrl = `http://51.75.118.17:20307/attack?number=${num}`;
                 
                 const response = await fetch(serverUrl, {
-    mode: 'no-cors'
+    mode: 'no-cors' // هذا السطر يخبر المتصفح بإرسال الطلب حتى لو كان هناك اختلاف في الأمان
+});
 
                 if (response.ok) {
                     status.style.color = "#00ff00";
